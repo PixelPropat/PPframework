@@ -16,6 +16,9 @@ public:
     void Unlock() {
         pthread_mutex_unlock(&ppmutex);
     }
+    pthread_mutex_t* GetMutex() {
+        return &ppmutex;
+    }
 
 private:
     pthread_mutex_t ppmutex;
