@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <deque>
 #include "Condition.h"
+#include "Thread.h"
 
 Mutex ppmutex;
 int err = 0;
