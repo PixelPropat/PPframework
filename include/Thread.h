@@ -1,6 +1,7 @@
 #ifndef PP_THREAD_H
 #define PP_THREAD_H
 
+#include "CountDownLatch.h"
 #include <pthread.h>
 #include <functional>
 
@@ -16,6 +17,7 @@ public:
 private:
     pthread_t pthread_Id_;
     pid_t tid_;
+    CountDownLatch latch_;
     bool started_;
     bool joined_;
     ThreadFunc func_;
@@ -25,8 +27,9 @@ struct ThreadData {
     typedef Thread::ThreadFunc ThreadFunc;
     ThreadFunc func_;
     pid_t* tid_;
+    CountDownLatch* latch_;
 
-    ThreadData(ThreadFunc func, pid_t* tid);
+    ThreadData(ThreadFunc func, pid_t* tid, CountDownLatch* latch);
     void RunInThread();
 };
 

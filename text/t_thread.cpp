@@ -14,7 +14,6 @@ int main() {
 
     Thread t1(Func);
     t1.start();
-    sleep(1);//if not do this tid hasn't been initialised
     printf("t1's tid=%d\n", t1.tid());
     t1.join();
 

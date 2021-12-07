@@ -3,14 +3,17 @@
 
 #include <assert.h>
 
-ThreadData::ThreadData(ThreadFunc func, pid_t* tid)
+ThreadData::ThreadData(ThreadFunc func, pid_t* tid, CountDownLatch* latch)
     : func_(std::move(func)),
-      tid_(tid) { }
+      tid_(tid),
+      latch_(latch) { }
 
 void ThreadData::RunInThread() {
-    //*tid_ = CurrentThread::tid();
+    *tid_ = CurrentThread::tid();
     printf("ready to call the thread function, thread id is %d\n", *tid_);
     tid_ = NULL;
+    latch_->CountDown();
+    latch_ = NULL;
     func_();
 }
 
@@ -19,7 +22,8 @@ Thread::Thread(const ThreadFunc func)
       started_(false),
       joined_(false),
       pthread_Id_(0),
-      tid_(0) {
+      tid_(0),
+      latch_(1) {
     printf("Thread constructor\n"); 
 }
 
@@ -31,7 +35,6 @@ Thread::~Thread() {
 
 static void* ThreadCaller(void* arg) {
     ThreadData* data = static_cast<ThreadData*>(arg);
-    *data->tid_ = CurrentThread::tid();
     data->RunInThread();
     delete data;
 }
@@ -39,10 +42,14 @@ static void* ThreadCaller(void* arg) {
 void Thread::start() {
     assert(!started_);
     started_ = true;
-    ThreadData* Funcpasser = new ThreadData(func_, &tid_);
+    ThreadData* Funcpasser = new ThreadData(func_, &tid_, &latch_);
     if (pthread_create(&pthread_Id_, NULL, ThreadCaller, Funcpasser)) {
         started_ = false;
         delete Funcpasser;
+    }
+    else {
+        latch_.Wait();
+        assert(tid_ > 0);
     }
 }
 
