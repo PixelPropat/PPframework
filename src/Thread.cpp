@@ -8,7 +8,7 @@ ThreadData::ThreadData(ThreadFunc func, pid_t* tid)
       tid_(tid) { }
 
 void ThreadData::RunInThread() {
-    *tid_ = CurrentThread::tid();
+    //*tid_ = CurrentThread::tid();
     printf("ready to call the thread function, thread id is %d\n", *tid_);
     tid_ = NULL;
     func_();
@@ -31,6 +31,7 @@ Thread::~Thread() {
 
 static void* ThreadCaller(void* arg) {
     ThreadData* data = static_cast<ThreadData*>(arg);
+    *data->tid_ = CurrentThread::tid();
     data->RunInThread();
     delete data;
 }
@@ -46,7 +47,10 @@ void Thread::start() {
 }
 
 int Thread::join() {
+    int err = 0;
     assert(started_ && !joined_);
     joined_ = true;
-    return pthread_join(pthread_Id_, NULL);
+    err = pthread_join(pthread_Id_, NULL);
+    printf("Thread join\n");
+    return err;
 }
