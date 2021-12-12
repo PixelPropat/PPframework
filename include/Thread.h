@@ -2,10 +2,11 @@
 #define PP_THREAD_H
 
 #include "CountDownLatch.h"
+#include "Noncopyable.h"
 #include <pthread.h>
 #include <functional>
 
-class Thread {
+class Thread : noncopyable {
 public:
     typedef std::function<void()> ThreadFunc;
     Thread(const ThreadFunc func);

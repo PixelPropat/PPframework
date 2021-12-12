@@ -1,8 +1,11 @@
 #ifndef PP_MUTEX_H
 #define PP_MUTEX_H
+
 #include <stdio.h>
 #include <pthread.h>
-class Mutex {
+#include "Noncopyable.h"
+
+class Mutex : noncopyable {
 public:
     inline Mutex() {
         pthread_mutex_init(&ppmutex, NULL);
@@ -24,7 +27,7 @@ private:
     pthread_mutex_t ppmutex;
 };
 
-class MutexLock {
+class MutexLock : noncopyable {
 public: 
     MutexLock(Mutex& mutex) : mutex_(mutex) {
         mutex_.Lock();

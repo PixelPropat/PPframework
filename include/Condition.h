@@ -3,7 +3,7 @@
 
 #include "Mutex.h"
 
-class Condition
+class Condition : noncopyable
 {
 private:
     Mutex& mutex_;

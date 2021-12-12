@@ -3,7 +3,7 @@
 
 #include "Condition.h"
 
-class CountDownLatch
+class CountDownLatch : noncopyable
 {
 private:
     mutable Mutex mutex_;
