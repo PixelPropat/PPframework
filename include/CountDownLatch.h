@@ -17,21 +17,21 @@ public:
     int GetCount() const;
 };
 
-CountDownLatch::CountDownLatch(int count)
+inline CountDownLatch::CountDownLatch(int count)
     : mutex_(),
       cond_(mutex_),
       count_(count) {}
 
-CountDownLatch::~CountDownLatch() {}
+inline CountDownLatch::~CountDownLatch() {}
 
-void CountDownLatch::Wait() {
+inline void CountDownLatch::Wait() {
     MutexLock Lock(mutex_);
     while (count_ > 0) {
         cond_.Wait();
     }
 }
 
-void CountDownLatch::CountDown() {
+inline void CountDownLatch::CountDown() {
     MutexLock Lock(mutex_);
     --count_;
     if (count_ == 0) {
@@ -39,7 +39,7 @@ void CountDownLatch::CountDown() {
     }
 }
 
-int CountDownLatch::GetCount() const {
+inline int CountDownLatch::GetCount() const {
     MutexLock Lock(mutex_);
     return count_;
 }
