@@ -3,6 +3,10 @@
 
 #include <assert.h>
 
+namespace CurrentThread {
+    __thread int t_cachedTid = 0;
+}
+
 ThreadData::ThreadData(ThreadFunc func, pid_t* tid, CountDownLatch* latch)
     : func_(std::move(func)),
       tid_(tid),

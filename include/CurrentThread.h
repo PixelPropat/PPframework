@@ -6,8 +6,8 @@
 #include <syscall.h>
 
 namespace CurrentThread {
-    __thread int t_cachedTid = 0;
-    pid_t tid() {
+    extern __thread int t_cachedTid;
+    inline pid_t tid() {
         if (t_cachedTid == 0) {
             t_cachedTid = syscall(SYS_gettid);
         }
