@@ -1,6 +1,7 @@
 #ifndef PP_EVENTLOOP_H
 #define PP_EVENTLOOP_H
 
+#include <assert.h>
 #include "Noncopyable.h"
 #include "CurrentThread.h"
 
@@ -11,13 +12,12 @@ public:
     void loop();
     
     void assertInLoopThread() {
-        if (!isInLoopThread()) {
-            abortNotInLoopThread();
-        }
+        assert(isInLoopThread());
     }
     bool isInLoopThread() const { return thread_ID == CurrentThread::tid(); }
+    static Eventloop* GetEventLoopOfCurrentThread();
 private:
-    void abortNotInLoopThread();
+    //void abortNotInLoopThread();
     bool looping_;
     const pid_t thread_ID;
 };

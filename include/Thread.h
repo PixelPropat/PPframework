@@ -6,9 +6,10 @@
 #include <pthread.h>
 #include <functional>
 
+typedef std::function<void()> ThreadFunc;
+
 class Thread : noncopyable {
-public:
-    typedef std::function<void()> ThreadFunc;
+public: 
     Thread(const ThreadFunc func);
     ~Thread();
     void start();
@@ -25,7 +26,6 @@ private:
 };
 
 struct ThreadData {
-    typedef Thread::ThreadFunc ThreadFunc;
     ThreadFunc func_;
     pid_t* tid_;
     CountDownLatch* latch_;

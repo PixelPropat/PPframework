@@ -1,7 +1,7 @@
 #ifndef PP_NONCOPYABLE
 #define PP_NONCOPYABLE
 
-class  noncopyable
+class noncopyable
 {
 private:
     noncopyable(const noncopyable&) {};
