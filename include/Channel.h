@@ -29,10 +29,10 @@ public:
     void disableReading() { events_ &= ~EPOLLIN; }
     void disableWriting() { events_ &= ~EPOLLOUT; }
 
-    Eventloop* ownerloop() const { return loop_; }
+    Eventloop* ownerloop() const { return ownerloop_; }
     
 private:
-    Eventloop* loop_;
+    Eventloop* ownerloop_;
     int fd_;
     int events_;
     int revents_;

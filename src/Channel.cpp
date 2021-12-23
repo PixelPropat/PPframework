@@ -2,7 +2,7 @@
 #include "Channel.h"
 
 Channel::Channel(Eventloop* loop, int fd)
-    : loop_(loop),
+    : ownerloop_(loop),
       fd_(fd),
       events_(0),
       revents_(0),
