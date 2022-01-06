@@ -2,13 +2,20 @@
 #define PP_EVENTLOOP_H
 
 #include <assert.h>
+#include <memory>
 #include "Noncopyable.h"
 #include "CurrentThread.h"
 
+typedef std::shared_ptr<Channel> Channelptr;
+typedef std::vector<Channelptr> ChannelList;
+class Epoll;
+class Channel;
 class Eventloop : noncopyable {
 public:
     Eventloop();
     ~Eventloop();
+    
+    void quit();
     void loop();
     
     void assertInLoopThread() {
@@ -20,6 +27,9 @@ private:
     //void abortNotInLoopThread();
     bool looping_;
     const pid_t thread_ID;
+    bool quit_;
+    std::shared_ptr<Epoll> Epoller_;
+    ChannelList activeChannels_;
 };
 
 
