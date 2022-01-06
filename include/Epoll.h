@@ -15,6 +15,7 @@ typedef std::shared_ptr<Channel> Channelptr;
 using ChannelList = std::vector<Channelptr>;
 //typedef std::vector<epoll_event> epolleventList;
 
+
 class Epoll : noncopyable {
 public:
 
@@ -25,8 +26,8 @@ public:
     void EpollAddChannel(Channelptr req);
     void EpollRmChannel(Channelptr req);
 
-    ChannelList Poll();
-    ChannelList GetActiveChannel(int events_num);
+    int Poll(ChannelList* activeChannels);
+    void GetActiveChannel(int events_num, ChannelList* activeChannels);
 
     int GetEpollFd() const { return epollfd_; }
 

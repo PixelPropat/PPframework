@@ -53,29 +53,27 @@ void Epoll::EpollRmChannel(Channelptr req) {
     }
 }
 
-ChannelList Epoll::Poll() {
+int Epoll::Poll(ChannelList* activeChannels) {
     while(true) {
         int numevents = epoll_wait(epollfd_, events_, EVENTS_NUM, EPOLLWAITTIME);
         if (numevents == -1) {
             continue;
         }
-        ChannelList ret = GetActiveChannel(numevents);
-        if (ret.size() > 0) {
-            return ret;
+        GetActiveChannel(numevents, activeChannels);
+        if ((*activeChannels).size() > 0) {
+            return 0;
         }
     }
 }
 
-ChannelList Epoll::GetActiveChannel(int events_num) {
+void Epoll::GetActiveChannel(int events_num, ChannelList* activeChannels) {
     assert(events_num > 0);
-    ChannelList ret;
     for (int i = 0; i < events_num; ++i) {
         int fd = events_[i].data.fd;
         Channelptr currentreq = fd2Channel[fd];
         if (currentreq) {
             currentreq->setrevents(events_->events);
-            ret.push_back(currentreq);
+            activeChannels->push_back(currentreq);
         }
     }
-    return ret;
 }
