@@ -3,13 +3,20 @@
 
 #include <assert.h>
 #include <memory>
+#include <vector>
 #include "Noncopyable.h"
 #include "CurrentThread.h"
 
-typedef std::shared_ptr<Channel> Channelptr;
-typedef std::vector<Channelptr> ChannelList;
+#define ADD 1
+#define MOD 2
+#define DEL 3
+
 class Epoll;
 class Channel;
+
+typedef std::shared_ptr<Channel> Channelptr;
+typedef std::vector<Channelptr> ChannelList;
+
 class Eventloop : noncopyable {
 public:
     Eventloop();
@@ -17,6 +24,8 @@ public:
     
     void quit();
     void loop();
+
+    void updateChannelFromOutside(Channelptr ch, int flag);
     
     void assertInLoopThread() {
         assert(isInLoopThread());

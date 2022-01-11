@@ -29,6 +29,24 @@ Eventloop::~Eventloop() {
 	t_loopInThisThread = 0;
 }
 
+void Eventloop::updateChannelFromOutside(Channelptr req, int flag) {
+	switch (flag)
+	{
+	case ADD:
+		Epoller_->EpollAddChannel(req);
+		break;
+	case MOD:
+		Epoller_->EpollModChannel(req);
+		break;
+	case DEL:
+		Epoller_->EpollRmChannel(req);
+		break;
+	default:
+		perror("Undefined update, wrong!\n");
+		break;
+	}
+}
+
 void Eventloop::quit() {
 	quit_ = true;
 } 
