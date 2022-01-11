@@ -10,11 +10,14 @@ Epoll::Epoll(Eventloop* loop)
       epollfd_(epoll_create1(EPOLL_CLOEXEC)),
       events_(new epoll_event[EVENTS_NUM])
     {
+        printf("epollfd constructing!\n");
         assert(epollfd_ > 0);
 }
 
 Epoll::~Epoll() {
+    printf("epollfd closing!\n");
     close(epollfd_);
+    delete[] events_;
 }
 
 void Epoll::EpollAddChannel(Channelptr req) {
